@@ -1,0 +1,13 @@
+[Unit]
+Description=CoSMoS Admin Dashboard
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=5s
+ExecStart=serve -l $PORT -s $SERVICE_DIR/build
+Environment=SERVICE_DIR=/home/ummc-user/cosmos/ummc-admin
+Environment=PORT=3002
+
+[Install]
+WantedBy=multi-user.target

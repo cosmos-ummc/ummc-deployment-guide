@@ -1,0 +1,16 @@
+[Unit]
+Description=CoSMoS Bot
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=5s
+ExecStart=python3 /path/to/bot
+Environment=PORT=3003
+Environment=API_BASE_URL=http://api.ummc.cosmos.care/v1
+Environment=WEB_HOOK_URL=http://bot.ummc.cosmos.care/
+Environment=API_AUTHORIZATION_TOKEN=
+Environment=BOT_TOKEN=
+
+[Install]
+WantedBy=multi-user.target

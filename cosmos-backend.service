@@ -1,0 +1,25 @@
+[Unit]
+Description=CoSMoS Backend
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=5s
+ExecStart=$SERVICE_DIR/service
+Environment=SERVICE_DIR=/home/ummc-user/cosmos/ummc-backenc
+Environment=PORT=3001
+Environment=ADMIN_URL=https://admin.ummc.cosmos.care
+Environment=AUTH_ENABLED=true
+Environment=SMTP_SERVER_HOST=smtp.gmail.com
+Environment=SMTP_SERVER_PORT=587
+Environment=CHATBOT_USER=
+Environment=BOT_TOKEN=
+Environment=ACCESS_SECRET=
+Environment=REFRESH_SECRET=
+Environment=BACKEND_USER=
+Environment=MONGODB_URL=
+Environment=COSMOS_EMAIL_ADDRESS=
+Environment=COSMOS_EMAIL_PASSWORD=
+
+[Install]
+WantedBy=multi-user.target
