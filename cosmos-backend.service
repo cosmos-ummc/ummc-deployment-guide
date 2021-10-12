@@ -6,7 +6,7 @@ Type=simple
 Restart=always
 RestartSec=5s
 ExecStart=$SERVICE_DIR/service
-Environment=SERVICE_DIR=/home/ummc-user/cosmos/ummc-backenc
+Environment=SERVICE_DIR=/home/ummc-user/cosmos/ummc-backend
 Environment=PORT=3001
 Environment=ADMIN_URL=https://admin.ummc.cosmos.care
 Environment=AUTH_ENABLED=true
