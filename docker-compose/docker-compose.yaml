@@ -1,0 +1,70 @@
+services:
+  ummc-backend:
+    image: cosmosummc/ummc-backend
+    environment:
+      - 'AUTH_ENABLED=true'
+      - 'CHATBOT_USER=user'
+      - 'BACKEND_USER=user'
+      - 'MONGODB_URL=mongodb://localhost:27017'
+      - 'COSMOS_EMAIL_ADDRESS=email@example.com'
+      - 'COSMOS_EMAIL_PASSWORD=password'
+      - 'SMTP_SERVER_HOST=smtp.example.com'
+      - 'SMTP_SERVER_PORT=1000'
+      - 'ADMIN_URL=https://admin.example.com'
+      - 'ACCESS_SECRET=secret'
+      - 'REFRESH_SECRET=secret'
+      - 'BOT_TOKEN=secret'
+      - 'ALERT_MESSAGE_RECIPIENTS=message'
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.ummc-backend.rule=Host(`api.example.com`)'
+      - 'traefik.http.routers.ummc-backend.entrypoints=web'
+      - 'traefik.http.services.ummc-backend.loadbalancer.server.port=10002'
+  ummc-decision-engine:
+    image: cosmosummc/ummc-decision-engine
+    environment:
+      - 'MONGODB_URL=mongodb://localhost:27017'
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.ummc-decision-engine.rule=Host(`de.example.com`)'
+      - 'traefik.http.routers.ummc-decision-engine.entrypoints=web'
+      - 'traefik.http.services.ummc-decision-engine.loadbalancer.server.port=10002'
+  ummc-bot:
+    image: cosmosummc/ummc-bot
+    environment:
+      - 'BOT_TOKEN=secret'
+      - 'WEB_HOOK_URL=https://bot.example.com'
+      - 'API_BASE_URL=https://api.example.com'
+      - 'API_AUTHORIZATION_TOKEN=secret'
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.ummc-bot.rule=Host(`bot.example.com`)'
+      - 'traefik.http.routers.ummc-bot.entrypoints=web'
+      - 'traefik.http.services.ummc-bot.loadbalancer.server.port=10002'
+  ummc-notifications:
+    image: cosmosummc/ummc-notifications
+    environment:
+      - 'BOT_TOKEN=secret'
+      - 'API_BASE_URL=https://api.example.com'
+      - 'API_AUTHORIZATION_TOKEN=secret'
+  nginx:
+    image: nginx
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.nginx.rule=Host(`admin.example.com`,`form.example.com`,`app.example.com`)'
+      - 'traefik.http.routers.nginx.entrypoints=web'
+    volumes:
+      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ummc-admin/build:/var/www/admin.example.com/html:ro
+      - ./ummc-form/build:/var/www/app.example.com/html:ro
+      - ./ummc-form-builder/build:/var/www/form.example.com/html:ro
+  traefik:
+    image: 'traefik:v2.5'
+    command:
+      - '--providers.docker=true'
+      - '--providers.docker.exposedbydefault=false'
+      - '--entrypoints.web.address=:80'
+    ports:
+      - '80:80'
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock:ro'
