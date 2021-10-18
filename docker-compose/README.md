@@ -2,7 +2,8 @@
 
 ## Prerequisite
 
-- docker
+- [docker](https://docs.docker.com/get-docker/)
+- [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 
 ## Quick Start
 
